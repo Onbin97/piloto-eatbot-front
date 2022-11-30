@@ -1,0 +1,69 @@
+import React, { useState, useEffect } from 'react'
+import './test.scss'
+
+const Test = () => {
+  const [header, setHeader] = useState()
+  const [link, setLink] = useState()
+  const [body, setBody] = useState()
+  const [formData, setFormData] = useState()
+  console.log(header)
+  console.log(link)
+  console.log(body)
+  console.log(formData)
+
+  const headerOnChange = (e) => {
+    const { value } = e.target
+    setHeader(value)
+    setFormData({ ...formData, header: value })
+  }
+
+  const bodyOnChange = (e) => {
+    const { value } = e.target
+    setBody(value)
+    setFormData({ ...formData, body: value })
+  }
+
+  const linkOnchange = (e) => {
+    const { value } = e.target
+    setLink(value)
+    setFormData({ ...formData, link: value })
+  }
+
+  const formDataSubmit = (e) => {
+    e.preventDefault()
+    fetch('https://dh8eclzy2h.execute-api.ap-northeast-2.amazonaws.com/pilioto_eat_bot_stage/restaurant-info', {
+      method: 'POST',
+      body: JSON.stringify({ formData }),
+    })
+      .then((res) => res.json())
+      .then((data) => setFormData(data))
+  }
+
+  return (
+    <>
+      <main className="main">
+        <div className="mainBox">
+          <section className="sectionBox">
+            <div className="headerBox">
+              <input onChange={headerOnChange} className="headerInput" />
+              <label className="headerLabel">제목</label>
+            </div>
+            <div className="headerBox">
+              <input onChange={bodyOnChange} className="headerInput" />
+              <label className="headerLabel">설명</label>
+            </div>
+            <div className="headerBox">
+              <input onChange={linkOnchange} className="headerInput" />
+              <label className="headerLabel">link</label>
+            </div>
+            <button onClick={formDataSubmit} className="testClick">
+              등록하기
+            </button>
+          </section>
+        </div>
+      </main>
+    </>
+  )
+}
+
+export default Test
